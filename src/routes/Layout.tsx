@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import Album from './Album';
+import Album from '../pages/Album';
 import Controls from '../components/ui/Controls';
-import Home from './Home';
+import Home from '../pages/Home';
 import Sidebar from '../components/ui/Sidebar';
 
 const Layout = () => {

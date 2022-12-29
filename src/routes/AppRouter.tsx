@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import Layout from '../pages/Layout'
+import Layout from './Layout'
 
 export const AppRouter = () => {
   return (

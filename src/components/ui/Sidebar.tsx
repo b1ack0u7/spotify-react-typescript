@@ -8,12 +8,11 @@ const ItemSidebar = ({funcs}: any) => {
     selectedIcon,
     path
   } = funcs;
-  const base = '/app';
 
   return(
     <li className='w-full'>
       <NavLink
-        to={base + path}
+        to={path}
         className='grid grid-flow-col gap-x-4 justify-start text-gray-400 transition ease-in hover:text-white'
         style={({ isActive }) =>
           isActive ? { color: '#FFFFFF' } : {}
@@ -45,9 +44,9 @@ const Sidebar = () => {
         </div>
 
         <ul className='grid gap-y-4 mb-6'>
-          <ItemSidebar funcs={{text: 'Inicio', icon: 'fi fi-rr-home', selectedIcon: 'fi fi-sr-home', path: '/home'}}/>
-          <ItemSidebar funcs={{text: 'Buscar', icon: 'fi fi-rr-search', selectedIcon: 'fi fi-br-search', path: '/search'}}/>
-          <ItemSidebar funcs={{text: 'Biblioteca', icon: 'fi fi-rr-list', selectedIcon: 'fi fi-br-list', path: '/collection'}}/>
+          <ItemSidebar funcs={{text: 'Inicio', icon: 'fi fi-rr-home', selectedIcon: 'fi fi-sr-home', path: '/'}}/>
+          <ItemSidebar funcs={{text: 'Buscar', icon: 'fi fi-rr-search', selectedIcon: 'fi fi-br-search', path: 'search'}}/>
+          <ItemSidebar funcs={{text: 'Biblioteca', icon: 'fi fi-rr-list', selectedIcon: 'fi fi-br-list', path: 'collection'}}/>
         </ul>
 
         <div className='w-full h-[0.5px] rounded-full bg-gray-700 mb-4'/>

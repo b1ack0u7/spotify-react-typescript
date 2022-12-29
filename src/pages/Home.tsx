@@ -4,20 +4,20 @@ import SmallItem from '../components/home/SmallItem';
 import { storage, db } from '../firebase/config';
 import { getBlob, ref } from 'firebase/storage';
 import { collection, getDocs } from 'firebase/firestore';
-import { Album } from '../interfaces/interfaces';
+import { IAlbum } from '../interfaces/interfaces';
 import { Skeleton } from '@mui/material';
 import { Stack } from '@mui/system';
 import Redirectors from '../components/ui/Redirectors';
 
 const Home = () => {
-  const [albums, setAlbums] = useState<Album[] | null>(null);
+  const [albums, setAlbums] = useState<IAlbum[] | null>(null);
 
   const fetchAlbums = async() => {
-    let albums:Album[] = [];
+    let albums:IAlbum[] = [];
     let promiseBlobs:Promise<Blob>[] = [];
     
     const albumsQuery= await getDocs(collection(db, "albums"));
-    albumsQuery.forEach(item => albums.push({...item.data(), id: item.id} as Album));
+    albumsQuery.forEach(item => albums.push({...item.data(), id: item.id} as IAlbum));
     
     albums.forEach(item => {
       const blob = getBlob(ref(storage, `icons/${item.thumbnail}`));
@@ -38,7 +38,7 @@ const Home = () => {
   }, []);
   
   return (
-    <div className=''>
+    <div>
       <Redirectors />
 
       <p className='font-bold text-[2.2rem] mb-6'>Buenas Tardes</p>
