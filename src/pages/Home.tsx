@@ -12,7 +12,7 @@ const Home = () => {
 
   const fetchAlbums = async() => {
     let albumList: IAlbum[] = [];
-    let promiseThumbnails:Promise<string>[] = [];
+    let promiseThumbnails: Promise<string>[] = [];
   
     albumList = await fetchCollection('albums');
     albumList.forEach(item => promiseThumbnails.push(fetchFile('icons', item.thumbnail)));

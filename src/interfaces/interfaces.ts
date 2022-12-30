@@ -1,5 +1,5 @@
 interface ErrorOnFetch {
-  success: boolean;
+  success?: boolean;
   reason?: string
 }
 
@@ -28,4 +28,8 @@ export interface ISong extends ErrorOnFetch {
   artist_name: string;
   name: string;
   order: number;
+};
+
+export interface IAudio extends ISong {
+  audio_file: any
 };

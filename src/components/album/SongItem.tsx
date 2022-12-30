@@ -2,7 +2,7 @@ import React from 'react'
 import { ISong } from '../../interfaces/interfaces'
 import { useState } from 'react';
 
-const SongItem = ({song, handleDownloadSong}: {song: ISong, handleDownloadSong: (music_id: string) => Promise<void>}) => {
+const SongItem = ({song, handleDownloadSong}: {song: ISong, handleDownloadSong: (currentSongData: ISong) => Promise<void>}) => {
   const [isHovered, setIsHovered] = useState<Boolean>(false);
 
   return (
@@ -10,7 +10,7 @@ const SongItem = ({song, handleDownloadSong}: {song: ISong, handleDownloadSong: 
       className='mx-4 rounded-md transition cursor-pointer group hover:bg-[#282828]'
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={() => handleDownloadSong(song.id)}
+      onClick={() => handleDownloadSong(song)}
     >
       <div className='flex mx-4 my-2 items-center justify-between'>
         <div className='flex items-center'>

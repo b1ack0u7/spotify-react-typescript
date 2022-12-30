@@ -1,4 +1,6 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
 
 const useHover = () => {
   const [isHovered, setIsHovered] = useState<Boolean>(false);
@@ -9,9 +11,15 @@ const useHover = () => {
 }
 
 const Controls = () => {
+  const test = useSelector((state: RootState) => state.audioReducer);
   const rewind = useHover();
   const play = useHover();
   const forward = useHover();
+  
+  const handlePlay = () => {
+    console.log("🚀 ~ file: Controls.tsx:16 ~ Controls ~ currentSong", test)
+    
+  }
 
   return (
     <div className='absolute bottom-0 flex w-full h-[90px] text-white bg-[#181818] border-t border-[#282828]'>
@@ -31,7 +39,11 @@ const Controls = () => {
           <div className='grid grid-flow-col place-items-center mx-8'>
             <i className='fi fi-rr-shuffle cursor-pointer'/>
             <i {...rewind} className={`fi fi-${rewind.classN}-rewind cursor-pointer`}/>
-            <i {...play} className={`fi fi-${play.classN}-play cursor-pointer`}/>
+            <i
+              className={`fi fi-${play.classN}-play cursor-pointer`}
+              onClick={handlePlay}
+              {...play}
+            />
             <i {...forward} className={`fi fi-${forward.classN}-forward cursor-pointer`}/>
             <i  className='fi fi-rr-refresh cursor-pointer'/>
           </div>

@@ -1,19 +1,22 @@
 import { orderBy, where } from 'firebase/firestore';
 import { useEffect, useState } from "react";
+import { useDispatch } from 'react-redux';
 import { useParams } from "react-router-dom";
 import SongItem from '../components/album/SongItem';
 import Redirectors from "../components/ui/Redirectors";
 import { fetchCollection, fetchDocument, fetchFile } from '../firebase/firebaseManager';
 import { decodeB64 } from "../helpers/base64";
-import { IAlbum, IArtist, ISong } from '../interfaces/interfaces';
+import { IAlbum, IArtist, IAudio, ISong } from '../interfaces/interfaces';
+import { setCurrentSong } from '../redux/slices/audioSlice';
 
 const Album = () => {
+  const dispatch = useDispatch();
   const { idAlbum } = useParams<string>();
   
-  const [songs, setSongs] = useState<ISong[]>([]);
   const [albumData, setAlbumData] = useState<IAlbum | null>(null);
   const [artistData, setArtistData] = useState<IArtist | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [songs, setSongs] = useState<ISong[]>([]);
 
   const loadAlbum = async() => {
     const decodedAlbumId:string = decodeB64({stringToDecode: idAlbum!});
@@ -26,7 +29,6 @@ const Album = () => {
     artistInfo.picture = await fetchFile('profile_pictures', artistInfo.picture);
 
     songList = await fetchCollection('songs', where('album.id', '==', decodedAlbumId), orderBy('order', 'asc'));
-    console.log("🚀 ~ file: Album.tsx:29 ~ loadAlbum ~ songList", songList)
     
     setAlbumData({...albumInfo});
     setArtistData({...artistInfo});
@@ -34,10 +36,10 @@ const Album = () => {
     setIsLoading(false);
   };
 
-  const handleDownloadSong = async(music_id: string): Promise<void> => {
-    const music = await fetchFile('music', music_id+'.mp3');
-    const audiElement = new Audio(music);
-    audiElement.play();
+  const handleDownloadSong = async(currentSongData: ISong): Promise<void> => {
+    const music = await fetchFile('music', currentSongData.id+'.mp3');
+    const currentSong = {...currentSongData, audio_file: new Audio(music)} as IAudio;
+    dispatch(setCurrentSong(currentSong));
   }
 
   useEffect(() => {
