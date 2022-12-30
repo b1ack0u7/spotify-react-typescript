@@ -1,36 +1,25 @@
+import { Skeleton } from '@mui/material';
+import { Stack } from '@mui/system';
 import { useEffect, useState } from 'react';
 import MediumItem from '../components/home/MediumItem';
 import SmallItem from '../components/home/SmallItem';
-import { storage, db } from '../firebase/config';
-import { getBlob, ref } from 'firebase/storage';
-import { collection, getDocs } from 'firebase/firestore';
-import { IAlbum } from '../interfaces/interfaces';
-import { Skeleton } from '@mui/material';
-import { Stack } from '@mui/system';
 import Redirectors from '../components/ui/Redirectors';
+import { fetchCollection, fetchFile } from '../firebase/firebaseManager';
+import { IAlbum } from '../interfaces/interfaces';
 
 const Home = () => {
   const [albums, setAlbums] = useState<IAlbum[] | null>(null);
 
   const fetchAlbums = async() => {
-    let albums:IAlbum[] = [];
-    let promiseBlobs:Promise<Blob>[] = [];
-    
-    const albumsQuery= await getDocs(collection(db, "albums"));
-    albumsQuery.forEach(item => albums.push({...item.data(), id: item.id} as IAlbum));
-    
-    albums.forEach(item => {
-      const blob = getBlob(ref(storage, `icons/${item.thumbnail}`));
-      promiseBlobs.push(blob);
-    })
-    
-    await Promise.all(promiseBlobs)
-    .then((blobs) => {
-      blobs.forEach((item, idx) => {
-        albums[idx].thumbnail = URL.createObjectURL(item)
-      })
-    })
-    setAlbums([...albums]);
+    let albumList: IAlbum[] = [];
+    let promiseThumbnails:Promise<string>[] = [];
+  
+    albumList = await fetchCollection('albums');
+    albumList.forEach(item => promiseThumbnails.push(fetchFile('icons', item.thumbnail)));
+    await Promise.all(promiseThumbnails)
+    .then((thumbnails) => thumbnails.forEach((item, idx) => albumList[idx].thumbnail = item));
+
+    setAlbums([...albumList]);
   } 
 
   useEffect(() => {
@@ -38,7 +27,7 @@ const Home = () => {
   }, []);
   
   return (
-    <div>
+    <div className='select-none'>
       <Redirectors />
 
       <p className='font-bold text-[2.2rem] mb-6'>Buenas Tardes</p>

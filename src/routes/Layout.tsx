@@ -6,14 +6,16 @@ import Sidebar from '../components/ui/Sidebar';
 
 const Layout = () => {
   return (
-    <div className='flex yfont-[Inter] h-screen bg-[#121212]'>
+    <div className='flex font-[Inter] h-screen bg-[#121212]'>
       <Sidebar/>
 
-      <div className='m-7 text-white'>
-        <Routes>
-          <Route path='/' element={<Home/>}/>
-          <Route path='/album/:idAlbum' element={<Album/>}/>
-        </Routes>
+      <div className='w-full text-white'>
+        <div className='m-7'>
+          <Routes>
+            <Route path='/' element={<Home/>}/>
+            <Route path='/album/:idAlbum' element={<Album/>}/>
+          </Routes>
+        </div>
       </div>
 
       <Controls/>

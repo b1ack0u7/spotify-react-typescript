@@ -35,7 +35,7 @@ const ItemSidebar = ({funcs}: any) => {
 
 const Sidebar = () => {
   return (
-    <div className='w-[240px] h-full bg-black'>
+    <div className='w-[265px] h-full bg-black'>
       <div className='mx-6 mt-6'>
         <div className='h-[40px] mb-8'>
           <svg role="img" viewBox="0 0 78 24" height="100%">

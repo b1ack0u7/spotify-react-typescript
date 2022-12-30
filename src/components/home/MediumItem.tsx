@@ -1,8 +1,8 @@
 import { encodeB64 } from '../../helpers/base64';
-import { Album } from '../../interfaces/interfaces';
+import { IAlbum } from '../../interfaces/interfaces';
 import { useNavigate } from 'react-router-dom';
 
-const MediumItem = ({albumData}: {albumData: Album}) => {
+const MediumItem = ({albumData}: {albumData: IAlbum}) => {
   const navigate = useNavigate();
 
   return (
@@ -17,7 +17,7 @@ const MediumItem = ({albumData}: {albumData: Album}) => {
         </div>
       </div>
       <p className='mt-5 mb-2'>{albumData.album_name}</p>
-      <p className='text-gray-400 font-light text-[13px] underline'>{albumData.artist}</p>
+      <p className='text-gray-400 font-light text-[13px] underline'>{albumData.artist.name}</p>
     </div>
   )
 }

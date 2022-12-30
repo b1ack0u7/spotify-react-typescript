@@ -1,21 +1,29 @@
 import { db, storage } from './config';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, getDocs, query, collection, QueryConstraint } from 'firebase/firestore';
 import { getBlob, ref } from 'firebase/storage';
 
-const fetchDocument = async(document:string, value:string):Promise<Object> => {
-  const albumQuery = await getDoc(doc(db, document, value));
-  if (!albumQuery.exists()) {
-    return {...albumQuery.data(), success: true}
-  }
-  return {success: false, reason: 'No existe'};
+const fetchCollection = async <T>(collectionName: string, ...queryConstrains: QueryConstraint[]): Promise<T[]> => {
+  const collectQuery = await getDocs(query(collection(db, collectionName), ...queryConstrains));
+  let collectionList:T[] = [];
+  collectQuery.forEach(item => collectionList.push({...item.data(), id: item.id} as T));
+  return collectionList;
 }
 
-const fetchImage = async(folder:string, imageName:string):Promise<string> => {
-  const blob = await getBlob(ref(storage, `${folder}/${imageName}`));
+const fetchDocument = async(document: string, value: string): Promise<Object> => {
+  const documentQuery = await getDoc(doc(db, document, value));
+  if (documentQuery.exists()) {
+    return {...documentQuery.data(), success: true}
+  }
+  return {success: false, reason: `El objeto en el documento "${document}" con valor "${value}" no existe`};
+}
+
+const fetchFile = async(folder: string, fileName: string): Promise<string> => {
+  const blob = await getBlob(ref(storage, `${folder}/${fileName}`));
   return URL.createObjectURL(blob);
 }
 
 export {
+  fetchCollection,
   fetchDocument,
-  fetchImage,
+  fetchFile,
 }
