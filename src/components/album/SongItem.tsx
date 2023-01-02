@@ -2,7 +2,7 @@ import React from 'react'
 import { ISong } from '../../interfaces/interfaces'
 import { useState } from 'react';
 
-const SongItem = ({song, handleDownloadSong}: {song: ISong, handleDownloadSong: (currentSongData: ISong) => Promise<void>}) => {
+const SongItem = ({song, currentPlayingSong, handleDownloadSong}: {song: ISong, currentPlayingSong: Number | null, handleDownloadSong: (currentSongData: ISong) => Promise<void>}) => {
   const [isHovered, setIsHovered] = useState<Boolean>(false);
 
   return (
@@ -14,11 +14,17 @@ const SongItem = ({song, handleDownloadSong}: {song: ISong, handleDownloadSong: 
     >
       <div className='flex mx-4 my-2 items-center justify-between'>
         <div className='flex items-center'>
-            { isHovered ?
-              <i className='text-[16px] w-[16px] pr-10 font-light fi fi-sr-play transition ease-in-out duration-300 hover:scale-110'/>
-              :
-              <p className='text-[16px] w-[16px] pr-10 font-light'>{song.order}</p>
-            }
+          { currentPlayingSong == song.order ?
+            <i className='text-[16px] w-[16px] pr-10 font-light fi fi-sr-play transition ease-in-out duration-300 hover:scale-110'/>
+            :
+            <>
+              { isHovered ?
+                <i className='text-[16px] w-[16px] pr-10 font-light fi fi-sr-play transition ease-in-out duration-300 hover:scale-110'/>
+                :
+                <p className='text-[16px] w-[16px] pr-10 font-light'>{song.order}</p>
+              }
+            </>
+          }
           <div>
             <p>{song.name}</p>
             <span className='font-light text-[13px] hover:underline'>{song.artist_name}</span>

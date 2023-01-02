@@ -17,6 +17,7 @@ const Album = () => {
   const [artistData, setArtistData] = useState<IArtist | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [songs, setSongs] = useState<ISong[]>([]);
+  const [currentPlayingSong, setCurrentPlayingSong] = useState<Number | null>(null);
 
   const loadAlbum = async() => {
     const decodedAlbumId:string = decodeB64({stringToDecode: idAlbum!});
@@ -38,7 +39,8 @@ const Album = () => {
 
   const handleDownloadSong = async(currentSongData: ISong): Promise<void> => {
     const music = await fetchFile('music', currentSongData.id+'.mp3');
-    const currentSong = {...currentSongData, audio_file: new Audio(music)} as IAudio;
+    const currentSong = {...currentSongData, audio_file: music} as IAudio;
+    setCurrentPlayingSong(currentSong.order);
     dispatch(setCurrentSong(currentSong));
   }
 
@@ -73,7 +75,7 @@ const Album = () => {
         </div>
 
         <div className='flex flex-col border-b border-indigo-300 border-opacity-20 mb-4'>
-          <div className='flex my-2 mx-8'>
+          <div className='flex my-2 mx-8 text-[14px]'>
             <p className='w-[16px] pr-10 font-light text-[#B3B3B3]'>#</p>
             <div className='flex flex-1'>
               <p className='w-full font-light text-[#B3B3B3]'>TÍTULO</p>
@@ -88,6 +90,7 @@ const Album = () => {
               <SongItem 
                 key={idx}
                 song={item}
+                currentPlayingSong={currentPlayingSong}
                 handleDownloadSong={handleDownloadSong}
               />
             )

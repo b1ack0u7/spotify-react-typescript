@@ -2,14 +2,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IAudio } from "../../interfaces/interfaces";
 
 const initialState: IAudio = {
-  id: '',
+  id: undefined,
   album: {
-    id: '',
-    name: ''
+    id: undefined,
+    name: undefined
   },
-  audio_file: null,
-  artist_name: '',
-  name: '',
+  audio_file: undefined,
+  artist_name: undefined,
+  name: undefined,
   order: 0
 };
 
@@ -24,17 +24,10 @@ export const audioSlice = createSlice({
       state.artist_name = action.payload.artist_name,
       state.name = action.payload.name,
       state.order = action.payload.order
-      console.log("🚀 ~ file: audioSlice.tsx:34 ~ action", action)
-
-      // state.audio_file.play();
     },
-    stopCurrentSong: (state) => {
-      state.audio_file.stop();
-    }
   }
 });
 
 export const {
   setCurrentSong,
-  stopCurrentSong,
 } = audioSlice.actions;

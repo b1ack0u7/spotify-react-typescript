@@ -20,16 +20,16 @@ export interface IAlbum extends ErrorOnFetch {
 };
 
 export interface ISong extends ErrorOnFetch {
-  id: string;
+  id?: string;
   album: {
-    id: string;
-    name: string;
+    id?: string;
+    name?: string;
   };
-  artist_name: string;
-  name: string;
+  artist_name?: string;
+  name?: string;
   order: number;
 };
 
 export interface IAudio extends ISong {
-  audio_file: any
+  audio_file?: string
 };
