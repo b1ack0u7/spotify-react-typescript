@@ -1,6 +1,6 @@
 import { orderBy, where } from 'firebase/firestore';
 import { useEffect, useState } from "react";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from "react-router-dom";
 import SongItem from '../components/album/SongItem';
 import Redirectors from "../components/ui/Redirectors";
@@ -8,16 +8,17 @@ import { fetchCollection, fetchDocument, fetchFile } from '../firebase/firebaseM
 import { decodeB64 } from "../helpers/base64";
 import { IAlbum, IArtist, IAudio, ISong } from '../interfaces/interfaces';
 import { setCurrentSong } from '../redux/slices/audioSlice';
+import { RootState } from '../redux/store';
 
 const Album = () => {
-  const dispatch = useDispatch();
   const { idAlbum } = useParams<string>();
+  const currentSong = useSelector((state: RootState) => state.audioReducer);
+  const dispatch = useDispatch();
   
   const [albumData, setAlbumData] = useState<IAlbum | null>(null);
   const [artistData, setArtistData] = useState<IArtist | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [songs, setSongs] = useState<ISong[]>([]);
-  const [currentPlayingSong, setCurrentPlayingSong] = useState<Number | null>(null);
 
   const loadAlbum = async() => {
     const decodedAlbumId:string = decodeB64({stringToDecode: idAlbum!});
@@ -40,7 +41,6 @@ const Album = () => {
   const handleDownloadSong = async(currentSongData: ISong): Promise<void> => {
     const music = await fetchFile('music', currentSongData.id+'.mp3');
     const currentSong = {...currentSongData, audio_file: music} as IAudio;
-    setCurrentPlayingSong(currentSong.order);
     dispatch(setCurrentSong(currentSong));
   }
 
@@ -90,7 +90,7 @@ const Album = () => {
               <SongItem 
                 key={idx}
                 song={item}
-                currentPlayingSong={currentPlayingSong}
+                currentSong={currentSong}
                 handleDownloadSong={handleDownloadSong}
               />
             )

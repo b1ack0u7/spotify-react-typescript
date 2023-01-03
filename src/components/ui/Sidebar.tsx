@@ -1,23 +1,22 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'  
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
-const ItemSidebar = ({funcs}: any) => {
+const ItemSidebar = ({funcs, handleRedirect}: {funcs: any, handleRedirect: (path: string) => void}) => {
   const {
-    text,
     icon,
+    isActive,
+    redirectTo,
     selectedIcon,
-    path
+    text,
   } = funcs;
 
   return(
     <li className='w-full'>
-      <NavLink
-        to={path}
-        className='grid grid-flow-col gap-x-4 justify-start text-gray-400 transition ease-in hover:text-white'
-        style={({ isActive }) =>
-          isActive ? { color: '#FFFFFF' } : {}
-				}
-        children={({ isActive }) => isActive ? 
+      <div
+        className={`grid grid-flow-col gap-x-4 justify-start ${isActive ? 'text-gray-400' : 'text-[#FFFFFF]'} cursor-pointer transition ease-in hover:text-white`}
+        onClick={() => handleRedirect(redirectTo)}
+      >
+        { isActive ?
           <>
             <i className={`${selectedIcon} pt-[1px] text-[18px]`}/> 
             <p className='font-semibold text-[16px]'>{text}</p>
@@ -28,12 +27,19 @@ const ItemSidebar = ({funcs}: any) => {
             <p className='font-semibold text-[16px]'>{text}</p>
           </>
         }
-      />
+      </div>
     </li>
   )
 }
 
 const Sidebar = () => {
+  const currentPath = `/${useLocation().pathname.split('/')[2]}`;
+  const navigate = useNavigate();
+
+  const handleRedirect = (path: string): void => {
+    navigate(path);
+  }
+
   return (
     <div className='w-[265px] h-full bg-black'>
       <div className='mx-6 mt-6'>
@@ -44,9 +50,9 @@ const Sidebar = () => {
         </div>
 
         <ul className='grid gap-y-4 mb-6'>
-          <ItemSidebar funcs={{text: 'Inicio', icon: 'fi fi-rr-home', selectedIcon: 'fi fi-sr-home', path: '/'}}/>
-          <ItemSidebar funcs={{text: 'Buscar', icon: 'fi fi-rr-search', selectedIcon: 'fi fi-br-search', path: 'search'}}/>
-          <ItemSidebar funcs={{text: 'Biblioteca', icon: 'fi fi-rr-list', selectedIcon: 'fi fi-br-list', path: 'collection'}}/>
+          <ItemSidebar funcs={{text: 'Inicio', icon: 'fi fi-rr-home', selectedIcon: 'fi fi-sr-home', redirectTo: 'home', currentPath: currentPath}} handleRedirect={handleRedirect}/>
+          <ItemSidebar funcs={{text: 'Buscar', icon: 'fi fi-rr-search', selectedIcon: 'fi fi-br-search', redirectTo: 'search', currentPath: currentPath}} handleRedirect={handleRedirect}/>
+          <ItemSidebar funcs={{text: 'Biblioteca', icon: 'fi fi-rr-list', selectedIcon: 'fi fi-br-list', redirectTo: 'collection', currentPath: currentPath}} handleRedirect={handleRedirect}/>
         </ul>
 
         <div className='w-full h-[0.5px] rounded-full bg-gray-700 mb-4'/>

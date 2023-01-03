@@ -1,6 +1,7 @@
 import { Slider } from '@mui/material';
 import { useCallback, useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { RootState } from '../../redux/store';
 
 const useHover = () => {
@@ -13,6 +14,7 @@ const useHover = () => {
 
 const Controls = () => {
   const songObject = useSelector((state: RootState) => state.audioReducer);
+  const currentPath = useLocation().pathname;
   const rewind = useHover();
   const play = useHover();
   const forward = useHover();
@@ -26,6 +28,7 @@ const Controls = () => {
   const intervalRef = useRef<any>();
 
   const { duration } = audioRef.current;
+  const exceptionsPaths: string[] = ['/app', '/app/search'];
 
   const convertSecondsToDuration = (value: number): string => `${Math.floor(value / 60)}:${String(Math.ceil(value % 60)).padStart(2, '0')}`;
   
@@ -64,17 +67,29 @@ const Controls = () => {
 
   useEffect(() => {
     if (songObject.audio_file) {
+      if (exceptionsPaths.find(i => i == currentPath)) {
+        setIsPlaying(true);
+      } else {
+          clearInterval(intervalRef.current);
+          setTrackProgress(0);
+          setIsPlaying(false);
+          const audioTemp = new Audio(songObject.audio_file)
+          
+          setTimeout(() => {
+            audioRef.current = audioTemp;
+            setTotalDuration(convertSecondsToDuration(audioTemp.duration))
+            setIsPlaying(true);
+          }, 100);
+        }
+    }
+
+    return (() => {
+      audioRef.current.pause();
       clearInterval(intervalRef.current);
       setIsPlaying(false);
-      const audioTemp = new Audio(songObject.audio_file)
-      
-      setTimeout(() => {
-        audioRef.current = audioTemp;
-        setTotalDuration(convertSecondsToDuration(audioTemp.duration))
-        setIsPlaying(true);
-      }, 100);
-    }
+    });
   }, [songObject.audio_file]);
+  
 
   return (
     <div className='absolute bottom-0 flex w-full h-[90px] text-white bg-[#181818] border-t border-[#282828]'>

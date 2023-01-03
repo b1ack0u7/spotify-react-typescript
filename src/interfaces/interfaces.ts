@@ -31,5 +31,5 @@ export interface ISong extends ErrorOnFetch {
 };
 
 export interface IAudio extends ISong {
-  audio_file?: string
+  audio_file?: string;
 };

@@ -1,8 +1,7 @@
-import React from 'react'
-import { ISong } from '../../interfaces/interfaces'
+import { IAudio, ISong } from '../../interfaces/interfaces';
 import { useState } from 'react';
 
-const SongItem = ({song, currentPlayingSong, handleDownloadSong}: {song: ISong, currentPlayingSong: Number | null, handleDownloadSong: (currentSongData: ISong) => Promise<void>}) => {
+const SongItem = ({song, currentSong, handleDownloadSong}: {song: ISong, currentSong: IAudio | null, handleDownloadSong: (currentSongData: ISong) => Promise<void>}) => {
   const [isHovered, setIsHovered] = useState<Boolean>(false);
 
   return (
@@ -14,7 +13,7 @@ const SongItem = ({song, currentPlayingSong, handleDownloadSong}: {song: ISong, 
     >
       <div className='flex mx-4 my-2 items-center justify-between'>
         <div className='flex items-center'>
-          { currentPlayingSong == song.order ?
+          { currentSong?.id == song.id && currentSong?.order == song.order ?
             <i className='text-[16px] w-[16px] pr-10 font-light fi fi-sr-play transition ease-in-out duration-300 hover:scale-110'/>
             :
             <>

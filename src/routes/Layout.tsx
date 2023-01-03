@@ -12,8 +12,10 @@ const Layout = () => {
       <div className='w-full text-white'>
         <div className='m-7'>
           <Routes>
-            <Route path='/' element={<Home/>}/>
+            <Route path='/home' element={<Home/>}/>
             <Route path='/album/:idAlbum' element={<Album/>}/>
+
+            <Route path='/' element={<Navigate replace to='/app/home'/>}/>
           </Routes>
         </div>
       </div>
