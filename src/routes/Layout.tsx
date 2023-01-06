@@ -3,24 +3,33 @@ import Album from '../pages/Album';
 import Controls from '../components/ui/Controls';
 import Home from '../pages/Home';
 import Sidebar from '../components/ui/Sidebar';
+import Redirectors from '../components/ui/Redirectors';
 
 const Layout = () => {
   return (
-    <div className='flex font-[Inter] h-screen bg-[#121212]'>
-      <Sidebar/>
+    <div className='flex flex-col font-[Inter] bg-[#121212]'>
+      <div className='flex h-screen'>
+        <div className='w-[265px] bg-black select-none'>
+          <Sidebar/>
+        </div>
 
-      <div className='w-full text-white'>
-        <div className='m-7'>
-          <Routes>
-            <Route path='/home' element={<Home/>}/>
-            <Route path='/album/:idAlbum' element={<Album/>}/>
+        <div className='flex text-white m-7 flex-1 overflow-y-scroll'>
+          <Redirectors />
+          
+          <div className='mt-14 h-screen'>
+            <Routes>
+              <Route path='/home' element={<Home/>}/>
+              <Route path='/album/:idAlbum' element={<Album/>}/>
 
-            <Route path='/' element={<Navigate replace to='/app/home'/>}/>
-          </Routes>
+              <Route path='/' element={<Navigate replace to='/app/home'/>}/>
+            </Routes>
+          </div>
         </div>
       </div>
 
-      <Controls/>
+      <div className='absolute bottom-0 flex w-full h-[90px] text-white bg-[#181818] border-t border-[#282828]'>
+        <Controls/>
+      </div>
     </div>
   )
 }

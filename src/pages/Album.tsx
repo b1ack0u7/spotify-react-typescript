@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from "react-router-dom";
 import SongItem from '../components/album/SongItem';
-import Redirectors from "../components/ui/Redirectors";
 import { fetchCollection, fetchDocument, fetchFile } from '../firebase/firebaseManager';
 import { decodeB64 } from "../helpers/base64";
 import { IAlbum, IArtist, IAudio, ISong } from '../interfaces/interfaces';
@@ -47,9 +46,7 @@ const Album = () => {
   
   if (!isLoading) {
     return (
-      <div className='select-none'>
-        <Redirectors />
-        
+      <div className='select-none'>        
         <div className='flex gap-x-8 my-8'>
           <img 
             alt=''

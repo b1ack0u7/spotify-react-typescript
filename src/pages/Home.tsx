@@ -4,12 +4,15 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import MediumItem from '../components/home/MediumItem';
 import SmallItem from '../components/home/SmallItem';
-import Redirectors from '../components/ui/Redirectors';
 import { fetchCollection, fetchFile } from '../firebase/firebaseManager';
-import { IAlbum } from '../interfaces/interfaces';
+import { IAlbum, IAudio } from '../interfaces/interfaces';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
 
 const Home = () => {
+  const currentSong: IAudio = useSelector((state: RootState) => state.audioReducer);
   const [albums, setAlbums] = useState<IAlbum[] | null>(null);
+
   const fetchAlbums = async() => {
     let albumList: IAlbum[] = [];
     let promiseThumbnails: Promise<string>[] = [];
@@ -43,16 +46,15 @@ const Home = () => {
   
   return (
     <div className='select-none'>
-      <Redirectors />
-
       <p className='font-bold text-[2.2rem] mb-6'>{determineWelcomeText()}</p>
       <p className='font-bold text-[1.3rem] mb-4'>Escudado recientemente</p>
-      <div className='grid grid-cols-4 gap-x-5 mb-6'>
+      <div className='grid grid-cols-4 xl:grid-cols-7 gap-x-[24px] mb-6'>
         { albums ?
           albums.map((item, idx) => 
             <MediumItem
               key={idx}
               albumData={item}
+              currentSong={currentSong}
             />  
           )
           :

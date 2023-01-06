@@ -5,7 +5,7 @@ const Redirectors = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex gap-x-5">
+    <div className="fixed flex gap-x-5">
       <motion.i 
         className="fi fi-sr-angle-circle-left text-[2rem] cursor-pointer"
         whileHover={{ scale: 1.1 }}
