@@ -1,5 +1,6 @@
 import { Skeleton } from '@mui/material';
 import { Stack } from '@mui/system';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import MediumItem from '../components/home/MediumItem';
 import SmallItem from '../components/home/SmallItem';
@@ -9,7 +10,6 @@ import { IAlbum } from '../interfaces/interfaces';
 
 const Home = () => {
   const [albums, setAlbums] = useState<IAlbum[] | null>(null);
-
   const fetchAlbums = async() => {
     let albumList: IAlbum[] = [];
     let promiseThumbnails: Promise<string>[] = [];
@@ -20,7 +20,22 @@ const Home = () => {
     .then((thumbnails) => thumbnails.forEach((item, idx) => albumList[idx].thumbnail = item));
 
     setAlbums([...albumList]);
-  } 
+  };
+
+  const determineWelcomeText = (): string => {
+    const currentHour = Number(moment(new Date()).format('HH'));
+    let welcomeLabel;
+
+    if (currentHour > 5 && currentHour < 12 ) {
+      welcomeLabel = 'Días';
+    } else if (currentHour >= 12 && currentHour < 19) {
+      welcomeLabel = 'Tardes';
+    } else {
+      welcomeLabel = 'Noches';
+    }
+
+    return 'Buenas ' + welcomeLabel;
+  };
 
   useEffect(() => {
     fetchAlbums();
@@ -30,7 +45,7 @@ const Home = () => {
     <div className='select-none'>
       <Redirectors />
 
-      <p className='font-bold text-[2.2rem] mb-6'>Buenas Tardes</p>
+      <p className='font-bold text-[2.2rem] mb-6'>{determineWelcomeText()}</p>
       <p className='font-bold text-[1.3rem] mb-4'>Escudado recientemente</p>
       <div className='grid grid-cols-4 gap-x-5 mb-6'>
         { albums ?

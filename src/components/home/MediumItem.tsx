@@ -10,7 +10,7 @@ const MediumItem = ({albumData}: {albumData: IAlbum}) => {
       className='relative w-[183px] h-[261px] bg-[#181818] p-4 rounded-lg cursor-pointer transition group hover:bg-[#282828]'
       onClick={() => navigate('/app/album/'+encodeB64({stringToEncode: albumData.id}))}
     >
-      <img src={albumData.thumbnail} alt=''/>
+      <img src={albumData.thumbnail} alt='' onDragStart={(e) => e.preventDefault()}/>
       <div className='absolute opacity-0 w-[40px] h-[40px] bottom-[6.3rem] right-[1.5rem] bg-emerald-400 rounded-full transition ease-in-out group-hover:opacity-100 hover:scale-110'>
         <div className='mt-[10px] text-center'>
           <i className='fi fi-sr-play'/>

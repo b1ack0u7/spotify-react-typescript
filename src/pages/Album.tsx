@@ -55,7 +55,9 @@ const Album = () => {
         
         <div className='flex gap-x-8 my-8'>
           <img 
+            alt=''
             className="w-[192px] h-[192px] xl:w-[232px] xl:h-[232px]"
+            onDragStart={(e) => e.preventDefault()}
             src={albumData?.thumbnail}
           />
   
@@ -64,8 +66,10 @@ const Album = () => {
             <p className='font-extrabold text-[4rem] xl:text-[5.5rem]'>{albumData?.album_name}</p>
   
             <div className='flex gap-x-2 items-center'>
-              <img 
+              <img
+                alt=''
                 className="w-[25px] h-[25px] rounded-full"
+                onDragStart={(e) => e.preventDefault()}
                 src={artistData?.picture}
               />
               <p className='capitalize font-semibold hover:underline cursor-pointer'>{albumData?.artist.name}</p>
