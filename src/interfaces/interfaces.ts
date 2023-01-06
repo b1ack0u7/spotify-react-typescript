@@ -31,5 +31,6 @@ export interface ISong extends ErrorOnFetch {
 };
 
 export interface IAudio extends ISong {
-  audio_file?: string;
+  isPlaying: boolean;
+  isLoading: boolean;
 };

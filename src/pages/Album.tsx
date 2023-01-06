@@ -1,5 +1,5 @@
 import { orderBy, where } from 'firebase/firestore';
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from "react-router-dom";
 import SongItem from '../components/album/SongItem';
@@ -12,11 +12,12 @@ import { RootState } from '../redux/store';
 
 const Album = () => {
   const { idAlbum } = useParams<string>();
-  const currentSong = useSelector((state: RootState) => state.audioReducer);
   const dispatch = useDispatch();
+  const currentSong = useSelector((state: RootState) => state.audioReducer);
   
   const [albumData, setAlbumData] = useState<IAlbum | null>(null);
   const [artistData, setArtistData] = useState<IArtist | null>(null);
+  const [lCurrentSong, setLCurrentSong] = useState<IAudio>(currentSong);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [songs, setSongs] = useState<ISong[]>([]);
 
@@ -38,11 +39,7 @@ const Album = () => {
     setIsLoading(false);
   };
 
-  const handleDownloadSong = async(currentSongData: ISong): Promise<void> => {
-    const music = await fetchFile('music', currentSongData.id+'.mp3');
-    const currentSong = {...currentSongData, audio_file: music} as IAudio;
-    dispatch(setCurrentSong(currentSong));
-  }
+  useMemo(() => dispatch(setCurrentSong(lCurrentSong)), [lCurrentSong]);
 
   useEffect(() => {
     loadAlbum();
@@ -95,7 +92,7 @@ const Album = () => {
                 key={idx}
                 song={item}
                 currentSong={currentSong}
-                handleDownloadSong={handleDownloadSong}
+                setLCurrentSong={setLCurrentSong}
               />
             )
           }

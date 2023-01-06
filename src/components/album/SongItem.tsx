@@ -1,7 +1,8 @@
-import { IAudio, ISong } from '../../interfaces/interfaces';
+import { CircularProgress } from '@mui/material';
 import { useState } from 'react';
+import { IAudio, ISong } from '../../interfaces/interfaces';
 
-const SongItem = ({song, currentSong, handleDownloadSong}: {song: ISong, currentSong: IAudio | null, handleDownloadSong: (currentSongData: ISong) => Promise<void>}) => {
+const SongItem = ({song, currentSong, handleDownloadSong, setLCurrentSong}: {song: ISong, currentSong: IAudio | null, handleDownloadSong?: (currentSongData: ISong) => Promise<void>, setLCurrentSong: React.Dispatch<React.SetStateAction<IAudio>>}) => {
   const [isHovered, setIsHovered] = useState<Boolean>(false);
 
   return (
@@ -9,20 +10,37 @@ const SongItem = ({song, currentSong, handleDownloadSong}: {song: ISong, current
       className='mx-4 rounded-md transition cursor-pointer group hover:bg-[#282828]'
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={() => handleDownloadSong(song)}
+      onClick={() => setLCurrentSong(song as IAudio)}
     >
       <div className='flex mx-4 my-2 items-center justify-between'>
         <div className='flex items-center'>
-          { currentSong?.id == song.id && currentSong?.order == song.order ?
-            <i className='text-[16px] w-[16px] pr-10 font-light fi fi-sr-play transition ease-in-out duration-300 hover:scale-110'/>
+          { currentSong?.id == song.id && currentSong?.isLoading ? 
+              <div className='pr-5'>
+                <CircularProgress
+                  size={20}
+                  thickness={6}
+                  sx={{
+                    color: '#E5E7EB'
+                  }}
+                />
+              </div>
             :
-            <>
-              { isHovered ?
-                <i className='text-[16px] w-[16px] pr-10 font-light fi fi-sr-play transition ease-in-out duration-300 hover:scale-110'/>
+              currentSong?.id == song.id && currentSong?.order == song.order ?
+                <>
+                  { isHovered ?
+                    <i className='text-[16px] w-[16px] pr-10 font-light fi fi-sr-pause transition ease-in-out duration-300'/>
+                    :
+                    <i className='text-[16px] w-[16px] pr-10 font-light fi fi-sr-play transition ease-in-out duration-300'/>
+                  }
+                </>
                 :
-                <p className='text-[16px] w-[16px] pr-10 font-light'>{song.order}</p>
-              }
-            </>
+                <>
+                  { isHovered ?
+                    <i className='text-[16px] w-[16px] pr-10 font-light fi fi-sr-play transition ease-in-out duration-300'/>
+                    :
+                    <p className='text-[16px] w-[16px] pr-10 font-light'>{song.order}</p>
+                  }
+                </>
           }
           <div>
             <p>{song.name}</p>

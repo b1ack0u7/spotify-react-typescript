@@ -1,7 +1,8 @@
 import { Slider } from '@mui/material';
-import { useCallback, useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchFile } from '../../firebase/firebaseManager';
+import { setIsLoading, setIsPlaying } from '../../redux/slices/audioSlice';
 import { RootState } from '../../redux/store';
 
 const useHover = () => {
@@ -13,22 +14,20 @@ const useHover = () => {
 }
 
 const Controls = () => {
-  const songObject = useSelector((state: RootState) => state.audioReducer);
-  const currentPath = useLocation().pathname;
-  const rewind = useHover();
-  const play = useHover();
+  const dispatch = useDispatch();
   const forward = useHover();
+  const play = useHover();
+  const rewind = useHover();
+  const songObject = useSelector((state: RootState) => state.audioReducer);
 
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [totalDuration, setTotalDuration] = useState<string>('0:00');
   const [trackIndex, setTrackIndex] = useState<number>(0);
   const [trackProgress, setTrackProgress] = useState<number>(0);
-  const [totalDuration, setTotalDuration] = useState<string>('0:00');
   
-  const audioRef = useRef<HTMLAudioElement>(new Audio(songObject.audio_file));
+  const audioRef = useRef<HTMLAudioElement>(new Audio());
   const intervalRef = useRef<any>();
 
   const { duration } = audioRef.current;
-  const exceptionsPaths: string[] = ['/app', '/app/search'];
 
   const convertSecondsToDuration = (value: number): string => `${Math.floor(value / 60)}:${String(Math.ceil(value % 60)).padStart(2, '0')}`;
   
@@ -50,46 +49,45 @@ const Controls = () => {
     audioRef.current.currentTime = value;
     setTrackProgress(audioRef.current.currentTime);
 
-    if (!isPlaying) {
-      setIsPlaying(true);
+    if (!songObject.isPlaying) {
+      dispatch(setIsPlaying(true));
     }
     startTimer();
   };
-  
+
+  const initializeSong = async () => {
+    dispatch(setIsLoading(true));
+    const audioTemp = new Audio (await fetchFile('music', songObject.id+'.mp3'));
+    dispatch(setIsLoading(false));
+    clearInterval(intervalRef.current);
+
+    setTimeout(()=> {
+      audioRef.current = audioTemp;
+      setTotalDuration(convertSecondsToDuration(audioTemp.duration));
+      dispatch(setIsPlaying(true));
+    }, 100);
+  };
+
   useEffect(() => {
-    if (isPlaying) {
+    if (songObject.isPlaying) {
       audioRef.current.play()
       startTimer();
     } else {
       audioRef.current.pause()
     }
-  }, [isPlaying]);
-
+  }, [songObject.isPlaying]);
+  
   useEffect(() => {
-    if (songObject.audio_file) {
-      if (exceptionsPaths.find(i => i == currentPath)) {
-        setIsPlaying(true);
-      } else {
-          clearInterval(intervalRef.current);
-          setTrackProgress(0);
-          setIsPlaying(false);
-          const audioTemp = new Audio(songObject.audio_file)
-          
-          setTimeout(() => {
-            audioRef.current = audioTemp;
-            setTotalDuration(convertSecondsToDuration(audioTemp.duration))
-            setIsPlaying(true);
-          }, 100);
-        }
+    if (songObject.id) {
+      initializeSong();
     }
 
     return (() => {
-      audioRef.current.pause();
+      dispatch(setIsPlaying(false));
+      setTrackProgress(0);
       clearInterval(intervalRef.current);
-      setIsPlaying(false);
     });
-  }, [songObject.audio_file]);
-  
+  }, [songObject.id]);
 
   return (
     <div className='absolute bottom-0 flex w-full h-[90px] text-white bg-[#181818] border-t border-[#282828]'>
@@ -110,22 +108,22 @@ const Controls = () => {
             <i className='fi fi-rr-shuffle cursor-pointer'/>
             <button
               className='disabled:text-gray-500'
-              disabled={!songObject.audio_file}
+              disabled={!songObject.id || songObject.isLoading}
               {...rewind}
             >
               <i className={`fi fi-${rewind.classN}-rewind`}/>
             </button>
             <button
               className='disabled:text-gray-500'
-              disabled={!songObject.audio_file}
-              onClick={() => setIsPlaying(!isPlaying)}
+              disabled={!songObject.id || songObject.isLoading}
+              onClick={() => dispatch(setIsPlaying(!songObject.isPlaying))}
               {...play}
             >
-              <i className={`fi fi-${play.classN}-${isPlaying ? 'pause' : 'play'}`}/>
+              <i className={`fi fi-${play.classN}-${songObject.isPlaying ? 'pause' : 'play'}`}/>
             </button>
             <button
               className='disabled:text-gray-500'
-              disabled={!songObject.audio_file}
+              disabled={!songObject.id || songObject.isLoading}
               {...forward}
             >
               <i className={`fi fi-${forward.classN}-forward`}/>
@@ -137,7 +135,7 @@ const Controls = () => {
             <p className='text-[12px] text-gray-300 w-[40px] text-center'>{convertSecondsToDuration(trackProgress)}</p>
             <Slider
               aria-label="time-indicator"
-              disabled={!songObject.audio_file}
+              disabled={!songObject.id || songObject.isLoading}
               max={duration}
               min={0}
               onChange={(_: any, value: any) => onScrub(value as number)}
