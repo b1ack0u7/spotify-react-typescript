@@ -13,10 +13,10 @@ const Layout = () => {
           <Sidebar/>
         </div>
 
-        <div className='flex text-white m-7 flex-1 overflow-y-scroll'>
+        <div className='flex flex-1 text-white m-7 overflow-y-scroll'>
           <Redirectors />
           
-          <div className='mt-14 h-screen'>
+          <div className='flex-1 h-screen mt-14'>
             <Routes>
               <Route path='/home' element={<Home/>}/>
               <Route path='/album/:idAlbum' element={<Album/>}/>

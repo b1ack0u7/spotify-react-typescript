@@ -27,7 +27,7 @@ const Controls = () => {
   const audioRef = useRef<HTMLAudioElement>(new Audio());
   const intervalRef = useRef<any>();
 
-  const { duration } = audioRef.current;
+  const duration = audioRef.current.duration | 0;
 
   const convertSecondsToDuration = (value: number): string => `${Math.floor(value / 60)}:${String(Math.ceil(value % 60)).padStart(2, '0')}`;
   

@@ -28,15 +28,15 @@ const SongItem = ({song, currentSong, handleDownloadSong, setLCurrentSong}: {son
               currentSong?.id == song.id && currentSong?.order == song.order ?
                 <>
                   { isHovered ?
-                    <i className='text-[16px] w-[16px] pr-10 font-light fi fi-sr-pause transition ease-in-out duration-300'/>
+                    <i className='text-[16px] w-[16px] pr-10 font-light fi fi-sr-pause'/>
                     :
-                    <i className='text-[16px] w-[16px] pr-10 font-light fi fi-sr-play transition ease-in-out duration-300'/>
+                    <i className='text-[16px] w-[16px] pr-10 font-light fi fi-sr-play'/>
                   }
                 </>
                 :
                 <>
                   { isHovered ?
-                    <i className='text-[16px] w-[16px] pr-10 font-light fi fi-sr-play transition ease-in-out duration-300'/>
+                    <i className='text-[16px] w-[16px] pr-10 font-light fi fi-sr-play'/>
                     :
                     <p className='text-[16px] w-[16px] pr-10 font-light'>{song.order}</p>
                   }

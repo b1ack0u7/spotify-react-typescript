@@ -70,8 +70,12 @@ const Sidebar = () => {
 
       <ul className='grid gap-y-3 mb-6'>
         { 
-          sideBarItems.map(item => 
-            <ItemSidebar funcs={{text: item.name, icon: `fi fi-rr-${item.icon}`, selectedIcon: `fi fi-sr-${item.icon}`, redirectTo: item.path, isActive: currentPath == `/${item.path}`}} handleRedirect={handleRedirect}/>
+          sideBarItems.map((item, idx) => 
+            <ItemSidebar 
+              key={idx}
+              funcs={{text: item.name, icon: `fi fi-rr-${item.icon}`, selectedIcon: `fi fi-sr-${item.icon}`, redirectTo: item.path, isActive: currentPath == `/${item.path}`}}
+              handleRedirect={handleRedirect}
+            />
           )
         }
       </ul>

@@ -1,11 +1,28 @@
 import { encodeB64 } from '../../helpers/base64';
-import { IAlbum, IAudio } from '../../interfaces/interfaces';
+import { IAlbum, IAudio, ISong } from '../../interfaces/interfaces';
 import { useNavigate } from 'react-router-dom';
+import { fetchDocument } from '../../firebase/firebaseManager';
+import { useDispatch } from 'react-redux';
+import { setCurrentSong, setIsPlaying } from '../../redux/slices/audioSlice';
+import { CircularProgress } from '@mui/material';
 
 const MediumItem = ({albumData, currentSong}: {albumData: IAlbum, currentSong: IAudio}) => {
-  console.log("🚀 ~ file: MediumItem.tsx:6 ~ MediumItem ~ currentSong", currentSong)
-  console.log("🚀 ~ file: MediumItem.tsx:6 ~ MediumItem ~ albumData", albumData)
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
+  const getRandomSong = (song_list: string[]) => {
+    return song_list[Math.floor(Math.random() * song_list.length)];
+  }
+  
+  const handlePlayRandomSong = async(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
+    if (albumData.id == currentSong.album.id) {
+      dispatch(setIsPlaying(!currentSong.isPlaying));
+    } else {
+      const randomSongData: IAudio = await fetchDocument('songs', getRandomSong(albumData.song_list)) as IAudio;
+      dispatch(setCurrentSong(randomSongData));
+    }
+  }
 
   return (
     <div
@@ -18,11 +35,28 @@ const MediumItem = ({albumData, currentSong}: {albumData: IAlbum, currentSong: I
         onDragStart={(e) => e.preventDefault()}
         src={albumData.thumbnail}
       />
-      <div className='absolute opacity-0 w-[40px] h-[40px] bottom-[7.1rem] right-[1.5rem] bg-emerald-400 rounded-full transition ease-in-out group-hover:opacity-100 hover:scale-110'>
-        <div className='mt-[10px] text-center'>
-          <i className='fi fi-sr-play'/>
+      <button
+        className='absolute opacity-0 w-[40px] h-[40px] bottom-[7.1rem] right-[1.5rem] bg-emerald-400 rounded-full transition ease-in-out group-hover:opacity-100 hover:scale-110 disabled:cursor-not-allowed'
+        onClick={handlePlayRandomSong}
+        disabled={currentSong.isLoading}
+      >
+        <div className='flex items-center justify-center text-center'>
+          { albumData.id == currentSong.album.id && currentSong.isLoading ?
+              <CircularProgress
+                size={20}
+                thickness={6}
+                sx={{
+                  color: '#E5E7EB'
+                }}
+              />
+            :
+            albumData.id == currentSong.album.id && currentSong.isPlaying ?
+              <i className='mt-[5px] fi fi-sr-pause'/>
+            :
+              <i className='mt-[5px] fi fi-sr-play'/>
+          }
         </div>
-      </div>
+      </button>
       <p className='mt-5 mb-2'>{albumData.album_name}</p>
       <p className='text-gray-400 font-light text-[13px] underline'>{albumData.artist.name}</p>
     </div>

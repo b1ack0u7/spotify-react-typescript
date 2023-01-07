@@ -9,12 +9,12 @@ const fetchCollection = async <T>(collectionName: string, ...queryConstrains: Qu
   return collectionList;
 }
 
-const fetchDocument = async(document: string, value: string): Promise<Object> => {
+const fetchDocument = async <T>(document: string, value: string): Promise<T> => {
   const documentQuery = await getDoc(doc(db, document, value));
   if (documentQuery.exists()) {
-    return {...documentQuery.data(), success: true}
+    return {...documentQuery.data(), id: value, success: true} as T
   }
-  return {success: false, reason: `El objeto en el documento "${document}" con valor "${value}" no existe`};
+  return {success: false, reason: `El objeto en el documento "${document}" con valor "${value}" no existe`} as T;
 }
 
 const fetchFile = async(folder: string, fileName: string): Promise<string> => {

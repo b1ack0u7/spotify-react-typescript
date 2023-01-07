@@ -4,6 +4,7 @@ interface ErrorOnFetch {
 }
 
 export interface IArtist extends ErrorOnFetch {
+  id: string;
   name: string;
   picture: string;
 }

@@ -24,10 +24,10 @@ const Album = () => {
     const decodedAlbumId:string = decodeB64({stringToDecode: idAlbum!});
     
     let songList: ISong[] = [];
-    let albumInfo = await fetchDocument('albums', decodedAlbumId) as IAlbum;
+    let albumInfo: IAlbum = await fetchDocument('albums', decodedAlbumId);
     albumInfo.thumbnail = await fetchFile('icons', albumInfo.thumbnail);
     
-    let artistInfo = await fetchDocument('artists', albumInfo.artist.id) as IArtist;
+    let artistInfo: IArtist = await fetchDocument('artists', albumInfo.artist.id) ;
     artistInfo.picture = await fetchFile('profile_pictures', artistInfo.picture);
 
     songList = await fetchCollection('songs', where('album.id', '==', decodedAlbumId), orderBy('order', 'asc'));
