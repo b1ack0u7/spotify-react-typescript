@@ -1,12 +1,13 @@
 import { Skeleton } from '@mui/material';
 import { Stack } from '@mui/system';
+import { where } from 'firebase/firestore';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import MediumItem from '../components/home/MediumItem';
 import SmallItem from '../components/home/SmallItem';
 import { fetchCollection, fetchFile } from '../firebase/firebaseManager';
 import { IAlbum, IAudio } from '../interfaces/interfaces';
-import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 
 const Home = () => {
@@ -17,8 +18,8 @@ const Home = () => {
     let albumList: IAlbum[] = [];
     let promiseThumbnails: Promise<string>[] = [];
   
-    albumList = await fetchCollection('albums');
-    albumList.forEach(item => promiseThumbnails.push(fetchFile('icons', item.thumbnail)));
+    albumList = await fetchCollection('albums', where('isActive', '==', true));
+    albumList.forEach(item => promiseThumbnails.push(fetchFile('album_thumbnails', item.thumbnail)));
     await Promise.all(promiseThumbnails)
     .then((thumbnails) => thumbnails.forEach((item, idx) => albumList[idx].thumbnail = item));
 

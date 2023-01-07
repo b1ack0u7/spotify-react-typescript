@@ -16,6 +16,8 @@ export interface IAlbum extends ErrorOnFetch {
     id: string;
     name: string;
   };
+  isActive: boolean;
+  isMix: boolean;
   song_list: string[];
   thumbnail: string;
 };

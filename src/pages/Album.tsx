@@ -1,4 +1,4 @@
-import { orderBy, where } from 'firebase/firestore';
+import { documentId, orderBy, where } from 'firebase/firestore';
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from "react-router-dom";
@@ -22,15 +22,22 @@ const Album = () => {
 
   const loadAlbum = async() => {
     const decodedAlbumId:string = decodeB64({stringToDecode: idAlbum!});
-    
     let songList: ISong[] = [];
+
     let albumInfo: IAlbum = await fetchDocument('albums', decodedAlbumId);
-    albumInfo.thumbnail = await fetchFile('icons', albumInfo.thumbnail);
+    albumInfo.thumbnail = await fetchFile('album_thumbnails', albumInfo.thumbnail);
     
     let artistInfo: IArtist = await fetchDocument('artists', albumInfo.artist.id) ;
     artistInfo.picture = await fetchFile('profile_pictures', artistInfo.picture);
 
-    songList = await fetchCollection('songs', where('album.id', '==', decodedAlbumId), orderBy('order', 'asc'));
+    if (albumInfo.isMix) {
+      songList = await fetchCollection('songs', where(documentId(), 'in', albumInfo.song_list));
+      songList.forEach((item, idx) => {
+        item.order = idx+1;
+      });
+    } else {
+      songList = await fetchCollection('songs', where('album.id', '==', decodedAlbumId), orderBy('order', 'asc'));
+    }
     
     setAlbumData({...albumInfo});
     setArtistData({...artistInfo});
@@ -38,7 +45,16 @@ const Album = () => {
     setIsLoading(false);
   };
 
-  useMemo(() => dispatch(setCurrentSong(lCurrentSong)), [lCurrentSong]);
+  useMemo(() => {
+    let tempCurrentSong: IAudio = {...lCurrentSong};
+    if (albumData?.isMix) {
+      tempCurrentSong.album = {
+        id: albumData.id,
+        name: albumData.album_name
+      };
+    }
+    dispatch(setCurrentSong(tempCurrentSong));
+  }, [lCurrentSong]);
 
   useEffect(() => {
     loadAlbum();
@@ -87,9 +103,9 @@ const Album = () => {
             songs.map((item, idx) => 
               <SongItem 
                 key={idx}
-                song={item}
                 currentSong={currentSong}
                 setLCurrentSong={setLCurrentSong}
+                song={item}
               />
             )
           }

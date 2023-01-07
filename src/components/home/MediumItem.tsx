@@ -1,10 +1,10 @@
-import { encodeB64 } from '../../helpers/base64';
-import { IAlbum, IAudio, ISong } from '../../interfaces/interfaces';
+import { CircularProgress } from '@mui/material';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchDocument } from '../../firebase/firebaseManager';
-import { useDispatch } from 'react-redux';
+import { encodeB64 } from '../../helpers/base64';
+import { IAlbum, IAudio } from '../../interfaces/interfaces';
 import { setCurrentSong, setIsPlaying } from '../../redux/slices/audioSlice';
-import { CircularProgress } from '@mui/material';
 
 const MediumItem = ({albumData, currentSong}: {albumData: IAlbum, currentSong: IAudio}) => {
   const navigate = useNavigate();
@@ -19,7 +19,13 @@ const MediumItem = ({albumData, currentSong}: {albumData: IAlbum, currentSong: I
     if (albumData.id == currentSong.album.id) {
       dispatch(setIsPlaying(!currentSong.isPlaying));
     } else {
-      const randomSongData: IAudio = await fetchDocument('songs', getRandomSong(albumData.song_list)) as IAudio;
+      let randomSongData: IAudio = await fetchDocument('songs', getRandomSong(albumData.song_list));
+      if (albumData.isMix) {
+        randomSongData.album = {
+          id: albumData.id,
+          name: albumData.album_name
+        };
+      }
       dispatch(setCurrentSong(randomSongData));
     }
   }
@@ -31,7 +37,7 @@ const MediumItem = ({albumData, currentSong}: {albumData: IAlbum, currentSong: I
     >
       <img
         alt=''
-        className='rounded-sm'
+        className='rounded-md'
         onDragStart={(e) => e.preventDefault()}
         src={albumData.thumbnail}
       />

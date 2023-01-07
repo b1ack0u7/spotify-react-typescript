@@ -11,3 +11,11 @@ body {
   height: 100%;
   overflow: auto;
 }
+
+* {
+  -ms-overflow-style: none;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
