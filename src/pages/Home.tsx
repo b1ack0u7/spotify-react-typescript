@@ -49,7 +49,7 @@ const Home = () => {
     <div className='select-none'>
       <p className='font-bold text-[2.2rem] mb-6'>{determineWelcomeText()}</p>
       <p className='font-bold text-[1.3rem] mb-4'>Escudado recientemente</p>
-      <div className='grid grid-cols-4 xl:grid-cols-7 gap-x-[24px] mb-6'>
+      <div className='grid grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 gap-x-[24px] mb-6'>
         { albums ?
           albums.map((item, idx) => 
             <MediumItem
