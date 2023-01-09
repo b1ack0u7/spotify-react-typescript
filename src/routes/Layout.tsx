@@ -7,16 +7,16 @@ import Redirectors from '../components/ui/Redirectors';
 
 const Layout = () => {
   return (
-    <div className='flex flex-col font-[Inter] bg-[#121212]'>
-      <div className='flex h-screen'>
+    <div className='flex flex-col font-[Inter] bg-[#121212] h-screen'>
+      <div className='flex h-[612px] xl:h-[747px] 2xl:h-[770px]'>
         <div className='w-[265px] bg-black select-none'>
           <Sidebar/>
         </div>
 
-        <div className='flex flex-1 text-white m-7 overflow-y-scroll'>
+        <div className='text-white mx-7 mt-7 overflow-y-scroll'>
           <Redirectors />
-          
-          <div className='flex-1 h-screen mt-14'>
+
+          <div className='flex flex-col mt-12 mb-4'>
             <Routes>
               <Route path='/home' element={<Home/>}/>
               <Route path='/album/:idAlbum' element={<Album/>}/>
