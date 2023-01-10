@@ -7,12 +7,12 @@ const SongItem = ({song, currentSong, handleDownloadSong, setLCurrentSong}: {son
 
   return (
     <div 
-      className='mx-4 rounded-md transition cursor-pointer group hover:bg-[#282828]'
+      className='md:mx-4 rounded-md transition cursor-pointer group hover:bg-[#282828]'
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => setLCurrentSong(song as IAudio)}
     >
-      <div className='flex mx-[2px] md:mx-4 my-2 items-center justify-between'>
+      <div className='flex mx-4 my-2 items-center justify-between'>
         <div className='flex items-center'>
           { currentSong?.id == song.id && currentSong?.isLoading ? 
               <div className='pr-5'>

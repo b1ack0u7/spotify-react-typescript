@@ -14,7 +14,7 @@ const Layout = () => {
     <div className='flex flex-col font-[Inter] bg-[#121212] h-screen'>
       <div className='flex h-[751px] lg:h-[612px] xl:h-[747px] 2xl:h-[770px]'>
         <motion.div
-          className='absolute top-[31px] left-[8.5rem] flex items-center justify-center w-[32px] h-[32px] rounded-full bg-white lg:hidden'
+          className='absolute top-[31px] left-[8.5rem] flex items-center justify-center w-[32px] h-[32px] rounded-full bg-white z-10 lg:hidden'
           animate={{ x: showMenu ? 60 : 0 }}
           onClick={() => setShowMenu(!showMenu)}
           transition={{ ease: "easeInOut", duration: 0.2 }}

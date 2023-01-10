@@ -42,7 +42,7 @@ const MediumItem = ({albumData, currentSong}: {albumData: IAlbum, currentSong: I
         src={albumData.thumbnail}
       />
       <button
-        className='absolute opacity-0 w-[40px] h-[40px] bottom-[7.1rem] right-[1.5rem] bg-emerald-400 rounded-full transition ease-in-out md:group-hover:opacity-100 md:hover:scale-110 disabled:cursor-not-allowed'
+        className='absolute opacity-100 w-[40px] h-[40px] bottom-[7.1rem] right-[1.5rem] bg-emerald-400 rounded-full transition ease-in-out hidden md:block md:group-hover:opacity-100 md:hover:scale-110 disabled:cursor-not-allowed'
         onClick={handlePlayRandomSong}
         disabled={currentSong.isLoading}
       >
