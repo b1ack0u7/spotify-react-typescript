@@ -32,17 +32,17 @@ const MediumItem = ({albumData, currentSong}: {albumData: IAlbum, currentSong: I
 
   return (
     <div
-      className='relative w-[178px] h-[268px] xl:w-[207px] xl:h-[297px] bg-[#181818] p-4 rounded-lg cursor-pointer transition group hover:bg-[#282828]'
+      className='relative w-[149px] h-[239px] lg:w-[178px] lg:h-[268px] xl:w-[207px] xl:h-[297px] bg-[#181818] p-4 rounded-lg cursor-pointer transition group hover:bg-[#282828]'
       onClick={() => navigate('/app/album/'+encodeB64({stringToEncode: albumData.id}))}
     >
       <img
         alt=''
-        className='rounded-md'
+        className='rounded-sm lg:rounded-md'
         onDragStart={(e) => e.preventDefault()}
         src={albumData.thumbnail}
       />
       <button
-        className='absolute opacity-0 w-[40px] h-[40px] bottom-[7.1rem] right-[1.5rem] bg-emerald-400 rounded-full transition ease-in-out group-hover:opacity-100 hover:scale-110 disabled:cursor-not-allowed'
+        className='absolute opacity-0 w-[40px] h-[40px] bottom-[7.1rem] right-[1.5rem] bg-emerald-400 rounded-full transition ease-in-out md:group-hover:opacity-100 md:hover:scale-110 disabled:cursor-not-allowed'
         onClick={handlePlayRandomSong}
         disabled={currentSong.isLoading}
       >

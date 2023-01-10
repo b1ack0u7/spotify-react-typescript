@@ -49,7 +49,7 @@ const Home = () => {
     <div className='select-none'>
       <p className='font-bold text-[2.2rem] mb-6'>{determineWelcomeText()}</p>
       <p className='font-bold text-[1.3rem] mb-4'>Escudado recientemente</p>
-      <div className='grid grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 gap-x-[24px] mb-6'>
+      <div className='grid grid-cols-2 place-items-center md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 md:gap-x-[24px] gap-y-5 md:gap-y-0 mb-6'>
         { albums ?
           albums.map((item, idx) => 
             <MediumItem
@@ -81,14 +81,14 @@ const Home = () => {
         }
       </div>
 
-      <p className='font-bold text-[1.3rem] mb-6'>Tus mixes</p>
+      {/* <p className='font-bold text-[1.3rem] mb-6'>Tus mixes</p>
 
       <div className='grid grid-cols-2 gap-y-4 gap-x-8'>
         <SmallItem text='slouzzz phonk music' img='https://i.scdn.co/image/ab67706c0000da8492148c680bf2baa3fd47303e'/>
         <SmallItem text='Adrenaline Workout' img='https://i.scdn.co/image/ab67706f00000002929e39d3550da276515b31f2'/>
         <SmallItem text='Broken Heart' img='https://i.scdn.co/image/ab67706f0000000250f34f0e7a0b73effe02fa6f'/>
         <SmallItem text='GYM' img='https://mosaic.scdn.co/300/ab67616d00001e025f4c9262d32be3019e1dda3eab67616d00001e027abf4b0f94830241dcf61f6eab67616d00001e02be86ef103692ddebae2ec8cbab67616d00001e02daa4a83d2f794c1e31265dab'/>
-      </div>
+      </div> */}
     </div>
   )
 }

@@ -90,7 +90,7 @@ const Controls = () => {
   }, [songObject.id]);
 
   return (
-    <div className='grid w-full place-content-center grid-cols-3 mx-4'>
+    <div className='grid w-full place-content-center grid-cols-2 md:grid-cols-3 mx-4'>
       <div className='flex items-center'>
         <div className='mr-8'>
           <p className='select-none text-[15px]'>{songObject.name ?? 'None'}</p>
@@ -104,7 +104,7 @@ const Controls = () => {
 
       <div>
         <div className='grid grid-flow-col place-items-center mx-8'>
-          <i className='fi fi-rr-shuffle cursor-pointer'/>
+          <i className='fi fi-rr-shuffle cursor-pointer hidden md:block'/>
           <button
             className='disabled:text-gray-500'
             disabled={!songObject.id || songObject.isLoading}
@@ -127,7 +127,7 @@ const Controls = () => {
           >
             <i className={`fi fi-${forward.classN}-forward`}/>
           </button>
-          <i  className='fi fi-rr-refresh cursor-pointer'/>
+          <i  className='fi fi-rr-refresh cursor-pointer hidden md:block'/>
         </div>
 
         <div className='flex items-center gap-x-4 select-none'>
@@ -170,7 +170,7 @@ const Controls = () => {
         </div>
       </div>
 
-      <div className='grid grid-flow-col gap-x-8 place-content-end my-auto'>
+      <div className='hidden grid-flow-col gap-x-8 place-content-end my-auto md:grid'>
         <i className='fi fi-rr-microphone text-gray-300 transition hover:text-white'/>
         <i className='fi fi-rr-apps-sort text-gray-300 transition hover:text-white'/>
         <i className='fi fi-rr-screen text-gray-300 transition hover:text-white'/>

@@ -12,7 +12,7 @@ const SongItem = ({song, currentSong, handleDownloadSong, setLCurrentSong}: {son
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => setLCurrentSong(song as IAudio)}
     >
-      <div className='flex mx-4 my-2 items-center justify-between'>
+      <div className='flex mx-[2px] md:mx-4 my-2 items-center justify-between'>
         <div className='flex items-center'>
           { currentSong?.id == song.id && currentSong?.isLoading ? 
               <div className='pr-5'>
@@ -48,10 +48,8 @@ const SongItem = ({song, currentSong, handleDownloadSong, setLCurrentSong}: {son
           </div>
         </div>
 
-        <div className='flex gap-x-14 mr-6'>
-          { isHovered &&
-            <i className='fi fi-rr-heart transition hover:text-teal-200'/>
-          }
+        <div className='flex gap-x-14 mr-[18px] md:mr-6'>
+          <i className='fi fi-rr-heart hidden transition opacity-0 md:block group-hover:opacity-100 md:hover:text-teal-200'/>
           <p className='text-right font-light text-gray-400'>5:20</p>
         </div>
       </div>
